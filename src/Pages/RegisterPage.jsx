@@ -21,12 +21,13 @@ const Register = () => {
     console.log("values", values)
     try {
       const token = localStorage.getItem("token");
+      console.log("token is ",token)
       const response = await axios.post(
         "http://localhost:5055/Register",
         values,
         {
           headers: {
-            Authorization: `Bearer ${token}`
+            authorization: `bearer ${token}`
           },
         }
       )
@@ -48,7 +49,6 @@ const Register = () => {
             lastName: "",
             email: "",
             password: "",
-            isAdmin: "",
           }}
           validationSchema={SignupSchema}
           onSubmit={handleSignup}
@@ -125,14 +125,6 @@ const Register = () => {
                 className="text-red-500 text-xs italic"
                 name="password"
               />
-            </div>
-            <div className="mb-6">
-              <label
-                className="block text-gray-700 text-sm font-bold mb-2"
-                htmlFor="password"
-              >
-                Admin
-              </label>
             </div>
             <button
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"

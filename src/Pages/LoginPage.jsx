@@ -1,5 +1,5 @@
 // pages/Login.js
-import React, { useContext, useState } from "react"
+import React, { useContext } from "react"
 import { Formik, Form, Field, ErrorMessage } from "formik"
 import * as Yup from "yup"
 import axios from "axios"
@@ -14,18 +14,19 @@ const LoginSchema = Yup.object().shape({
 const Login = () => {
   const navigate = useNavigate()
   const { setIsLoggedIn } = useContext(UserAuthContext)
-  const handleLogin = async (values) => {
+  const handleLogin = async (values, { setSubmitting }) => {
     try {
       const response = await axios.post("http://localhost:5055/Login", values)
       console.log("login successful:", response.data)
 
-      const isAdmin = response.data
-      const admin = isAdmin.data.isAdmin
+      const isadmin = response.data
+      const admin = isadmin.data.isAdmin
 
       console.log("serverDAta", admin)
       const { token } = response.data
       // Save token and isAdmin status to local storage
       localStorage.setItem("token", token)
+
       setIsLoggedIn(true)
       if (admin) {
         navigate("/AdminPage")
@@ -36,9 +37,17 @@ const Login = () => {
       alert("User Login successfully!")
     } catch (error) {
       console.error("Error signing up:", error)
+      if (error.response && error.response.status === 401) {
+        // Handle 401 Unauthorized error (invalid credentials)
+        alert("Invalid credentials")
+      } else {
+        // Handle other errors
+        alert("An error occurred while logging in. Please try again later.")
+      }
+    } finally {
+      setSubmitting(false)
     }
   }
-
   return (
     <div className="bg-gray-100 min-h-screen flex items-center justify-center">
       <Formik
@@ -63,7 +72,7 @@ const Login = () => {
               placeholder="Enter a email"
             />
             <ErrorMessage
-              className="text-red-500 text-xs italic"
+              className="text-red-500 text-xs italic error-message"
               name="email"
             />
           </div>
@@ -82,7 +91,7 @@ const Login = () => {
               placeholder="Password"
             />
             <ErrorMessage
-              className="text-red-500 text-xs italic"
+              className="text-red-500 text-xs italic error-message"
               name="password"
             />
           </div>

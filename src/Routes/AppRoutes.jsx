@@ -1,18 +1,17 @@
-import React from "react"
+
 import { Route, Routes } from "react-router-dom"
 import HomePage from "../Pages/homePage"
 import Register from "../Pages/RegisterPage"
 import Login from "../Pages/LoginPage"
 import AdminPage from "../Pages/AdminPage"
-import CartPage from "../Pages/CartPage"
-import ItemPage from "../Pages/ItemPage"
 import PrivateRoutes from "./PrivateRoutes"
-import Header from "../component/Header"
+import POSPage from "../Pages/PosPage"
+import ItemPage from "../Pages/itemList"
 
 const AppRoutes = () => {
   return (
     <>
-      <Header />
+      
       <Routes>
         <Route
           path="/"
@@ -40,15 +39,15 @@ const AppRoutes = () => {
           }
         ></Route>
         <Route
-          path="/CartPage"
+          path="/pos"
           element={
             <PrivateRoutes>
-              <CartPage />
+              <POSPage />
             </PrivateRoutes>
           }
         ></Route>
         <Route
-          path="/ItemPage"
+          path="/itemList"
           element={
             <PrivateRoutes>
               <ItemPage />
